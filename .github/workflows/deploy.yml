@@ -10,7 +10,7 @@ on:
 env:
     PYTHON_VERSION: '3.9'
 jobs:  
-    terraform-plan:
+    run-function:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repository
@@ -22,6 +22,7 @@ jobs:
                 python-version: ${{ env.PYTHON_VERSION }}
             
             - name: Setup venv and Install dependencies
+              working-directory: ./src/python_function
               run: |
                 python -m venv venv
                 source venv/bin/activate
