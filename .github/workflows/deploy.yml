@@ -1,0 +1,16 @@
+name: Deploy terraform files
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    terraform-plan:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Initial commit
+              uses: actions/checkout@v3
+            
+            - run: echo "Fist github action"
+            - run: ls
+    
