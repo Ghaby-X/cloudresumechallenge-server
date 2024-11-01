@@ -3,14 +3,27 @@ on:
     push:
         branches:
             - main
+        paths:
+            - '/src/python_function/**'
+    workflow_dispatch:
 
-jobs:
+env:
+    PYTHON_VERSION: '3.9'
+jobs:  
     terraform-plan:
         runs-on: ubuntu-latest
         steps:
-            - name: Initial commit
+            - name: Checkout repository
               uses: actions/checkout@v3
             
-            - run: echo "Fist github action"
-            - run: ls
+            - name: set python version
+              uses: actions/setup-python@v1
+              with:
+                python-version: ${{ env.PYTHON_VERSION }}
+            
+            - name: Setup venv and Install dependencies
+              run: |
+                python -m venv venv
+                source venv/bin/activate
+                pip install -r requirements.txt
     
