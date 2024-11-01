@@ -1,4 +1,4 @@
-name: Deploy terraform files
+name: CI
 on:
     push:
         branches:
