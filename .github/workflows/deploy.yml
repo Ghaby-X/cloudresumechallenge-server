@@ -4,11 +4,13 @@ on:
         branches:
             - main
         paths:
-            - '/src/python_function/**'
+            - 'src/python_function/**'
     workflow_dispatch:
 
 env:
+    WORKING_DIRECTORY: './src/python_function'
     PYTHON_VERSION: '3.9'
+
 jobs:  
     run-function:
         runs-on: ubuntu-latest
@@ -22,9 +24,18 @@ jobs:
                 python-version: ${{ env.PYTHON_VERSION }}
             
             - name: Setup venv and Install dependencies
-              working-directory: ./src/python_function
+              working-directory: ${{ env.WORKING_DIRECTORY }}
               run: |
                 python -m venv venv
                 source venv/bin/activate
                 pip install -r requirements.txt
+            
+            # Add tests
+
+            # list terraform states
+            -   name: Terraform
+                working-directory: src/terraform
+                run: |
+                    ls
+                    terraform state list
     
