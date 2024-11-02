@@ -37,5 +37,6 @@ jobs:
                 working-directory: src/terraform
                 run: |
                     ls
+                    terraform init
                     terraform state list
     
