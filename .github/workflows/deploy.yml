@@ -37,6 +37,5 @@ jobs:
                 working-directory: src/terraform
                 run: |
                     ls
-                    terraform init
-                    terraform state list
+                    echo ${{ gh.secrets.CLIENT_ID }}
     
