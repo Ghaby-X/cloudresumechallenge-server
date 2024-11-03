@@ -19,6 +19,12 @@ terraform {
 
 provider "azurerm" {
   features {}
+
+
+  client_id       = ${{ gh.secrets.CLIENT_ID }}
+  client_secret   = ${{ gh.secrets.CLIENT_SECRET }}
+  tenant_id       = ${{ gh.secrets.TENANT_ID }}
+  subscription_id = ${{ gh.secrets.SUBSCRIPTION_ID }}
 }
 
 # --------------
