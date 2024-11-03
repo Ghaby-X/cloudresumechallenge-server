@@ -1,0 +1,53 @@
+name: Provision Terraform
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - 'src/terraform/**'
+    workflow_dispatch:
+
+env:
+    WORKING_DIRECTORY: '/src/terraform'
+    PYTHON_VERSION: '3.9'
+    ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+    ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+    ARM_TENANT_ID: ${{ secrets.TENANT_ID}}
+    ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID}}
+
+jobs:  
+    run-function:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+            
+            -   run: ls -a
+            
+            -   name: Terraform Init
+                working-directory: ${{ env.WORKING_DIRECTORY }}
+                run: |
+                    ls
+                    terraform init
+            
+            -   name: Terraform fmt
+                id: fmt
+                working-directory: ${{ env.WORKING_DIRECTORY }}
+                run: terraform fmt -check
+                continue-on-error: true
+
+            -   name: Terraform refresh
+                working-directory: ${{ env.WORKING_DIRECTORY }}
+                run: terraform refresh
+
+            -   name: Terraform Plan
+                working-directory: ${{ env.WORKING_DIRECTORY }}
+                run: |
+                    ls
+                    terraform plan
+                continue-on-error: true
+
+            -   name: Terraform apply
+                working-directory: src/terraform
+                run: |
+                    terraform apply --auto-approve
