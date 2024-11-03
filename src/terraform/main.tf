@@ -109,8 +109,8 @@ resource "azurerm_function_app" "fa" {
     APPLICATIONINSIGHTS_CONNECTION_STRING = azurerm_application_insights.app-insights.connection_string
     AzureWebJobsFeatureFlags              = "EnableWorkerIndexing"
     AzureWebJobsStorage                   = azurerm_storage_account.sa.primary_connection_string
-    # WEBSITE_RUN_FROM_PACKAGE              = "1"
-    CONNECTION_STRING = azurerm_storage_account.sa.primary_connection_string
+    WEBSITE_RUN_FROM_PACKAGE              = "1"
+    CONNECTION_STRING                     = azurerm_storage_account.sa.primary_connection_string
   }
 
   site_config {
