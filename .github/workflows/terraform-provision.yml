@@ -8,7 +8,7 @@ on:
     workflow_dispatch:
 
 env:
-    WORKING_DIRECTORY: '/src/terraform'
+    WORKING_DIRECTORY: 'src/terraform'
     PYTHON_VERSION: '3.9'
     ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
     ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
@@ -22,12 +22,13 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v3
             
-            -   run: ls -a
+            -   run: |
+                    ls /
+                    ls /home
             
             -   name: Terraform Init
                 working-directory: ${{ env.WORKING_DIRECTORY }}
                 run: |
-                    ls
                     terraform init
             
             -   name: Terraform fmt
