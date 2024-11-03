@@ -37,5 +37,5 @@ jobs:
                 working-directory: src/terraform
                 run: |
                     ls
-                    echo ${{ gh.secrets.CLIENT_ID }}
+                    echo ${{ secrets.CLIENT_ID }}
     
