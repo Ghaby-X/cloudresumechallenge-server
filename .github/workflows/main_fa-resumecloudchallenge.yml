@@ -38,15 +38,9 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Create and start virtual environment
-        working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-        
       - name: Install dependencies
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: pip install -r requirements.txt
+        run: pip install --target="./.python_packages/lib/site-packages" -r requirements.txt
 
       # Optional: Add step to run tests here
 
@@ -89,4 +83,4 @@ jobs:
           az functionapp deployment source config-zip \
             --resource-group ${{env.RESOURCE_GROUP_NAME}} \
             --name ${{env.FUNCITONAPP_NAME}} \
-            --src "./release.zip"
+            --src "release.zip"
