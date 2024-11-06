@@ -7,6 +7,10 @@ on:
             - 'src/python_function/**'
     workflow_dispatch:
 
+permissions:
+    contents: 'read'
+    id-token: 'write'
+
 env:
     WORKING_DIRECTORY: './src/python_function'
     PYTHON_VERSION: '3.9'
@@ -36,7 +40,7 @@ jobs:
 
             - name: check presence
               working-directory: ${{ env.WORKING_DIRECTORY }}
-              run: ls
+              run: ls -a
             
             - name: Zip python_function
               run: |
