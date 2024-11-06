@@ -21,9 +21,10 @@ env:
   PYTHON_VERSION: '3.9' # set this to the python version to use (supports 3.6, 3.7, 3.8)
   WORKING_DIRECTORY: 'src/python_function'
   ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
   ARM_TENANT_ID: ${{ secrets.TENANT_ID}}
   ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID}}
+  RESOURCE_GROUP_NAME: rg-resumecloudchallenge-dev
+  FUNCITONAPP_NAME: fa-resumecloudchallenge
 
 jobs:
   build:
@@ -81,13 +82,11 @@ jobs:
           tenant-id: ${{env.ARM_TENANT_ID}}
           subscription-id: ${{env.ARM_SUBSCRIPTION_ID}}
 
-      - run: az account show
+      - run: ls
 
       - name: 'Deploy to Azure Functions'
-        uses: Azure/functions-action@v1
-        id: deploy-to-function
-        with:
-          app-name: 'fa-resumecloudchallenge'
-          slot-name: 'Production'
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_96606CED42FB4F68AABE214D9A3C49EA }}
+        run: |
+          az functionapp deployment source config-zip \
+            --resource-group ${{env.RESOURCE_GROUP_NAME}} \
+            --name ${{env.FUNCITONAPP_NAME}} \
+            --src "./release.zip"
