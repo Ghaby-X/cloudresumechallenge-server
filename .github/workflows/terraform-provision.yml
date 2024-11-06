@@ -22,10 +22,6 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v3
             
-            -   run: |
-                    ls /
-                    ls /home
-            
             -   name: Terraform Init
                 working-directory: ${{ env.WORKING_DIRECTORY }}
                 run: |
