@@ -54,7 +54,6 @@ jobs:
           name: python-app
           path: |
             src/python_function/release.zip
-            !src/python_function/venv
 
   deploy:
     runs-on: ubuntu-latest
@@ -76,6 +75,7 @@ jobs:
           tenant-id: ${{env.ARM_TENANT_ID}}
           subscription-id: ${{env.ARM_SUBSCRIPTION_ID}}
 
+      - run: az --version
       - run: ls
 
       - name: 'Deploy to Azure Functions'
