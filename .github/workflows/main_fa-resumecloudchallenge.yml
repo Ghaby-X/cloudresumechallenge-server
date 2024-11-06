@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'src/python_function' # set this to the path to your web app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: ./ # set this to the path to your web app project, defaults to the repository root
   PYTHON_VERSION: '3.9' # set this to the python version to use (supports 3.6, 3.7, 3.8)
   WORKING_DIRECTORY: 'src/python_function'
 
@@ -51,7 +51,7 @@ jobs:
           name: python-app
           path: |
             src/python_function/release.zip
-            !venv/
+            !src/python_function/venv/
 
   deploy:
     runs-on: ubuntu-latest
@@ -65,6 +65,12 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip     
+      
+      - name: Look for presence of unzipped file
+        run: |
+          ls
+          cd src/python_function
+          ls
         
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
