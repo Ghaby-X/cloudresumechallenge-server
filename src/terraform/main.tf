@@ -65,6 +65,11 @@ resource "azurerm_storage_account" "sa" {
   }
 }
 
+resource "azurerm_storage_table" "example" {
+  name                 = "visitorcount"
+  storage_account_name = azurerm_storage_account.sa.name
+}
+
 resource "azurerm_application_insights" "app-insights" {
   name                = "fa-app-insights-${var.project_name}"
   resource_group_name = azurerm_resource_group.rg.name
