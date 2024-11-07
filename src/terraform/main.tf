@@ -65,7 +65,7 @@ resource "azurerm_storage_account" "sa" {
   }
 }
 
-resource "azurerm_storage_table" "example" {
+resource "azurerm_storage_table" "visitorcount" {
   name                 = "visitorcount"
   storage_account_name = azurerm_storage_account.sa.name
 }
