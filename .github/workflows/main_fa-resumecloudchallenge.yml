@@ -45,6 +45,7 @@ jobs:
           pip install --target="./.python_packages/lib/site-packages" -r requirements.txt
 
       # Optional: Add step to run tests here
+      - run: ls -a
 
       - name: Zip artifact for deployment
         working-directory: ${{ env.WORKING_DIRECTORY }}
@@ -66,10 +67,16 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: python-app
+      
+      - run: ls
 
       - name: Unzip artifact for deployment
         run: unzip release.zip     
         
+      - run: |
+          cd release
+          ls -a
+
       - name: Azure CLI login
         uses: azure/login@v1
         with:
