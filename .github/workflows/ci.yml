@@ -17,14 +17,14 @@ permissions:
     id-token: 'write'
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: "." # set this to the path to your web app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: . # set this to the path to your web app project, defaults to the repository root
   PYTHON_VERSION: '3.9' # set this to the python version to use (supports 3.6, 3.7, 3.8)
   WORKING_DIRECTORY: 'src/python_function'
   ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
   ARM_TENANT_ID: ${{ secrets.TENANT_ID}}
   ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID}}
   RESOURCE_GROUP_NAME: rg-resumecloudchallenge-dev
-  AZURE_FUNCTIONAPP_NAME: fa-resumecloudchallenge
+  FUNCITONAPP_NAME: fa-resumecloudchallenge
 
 jobs:
   build:
@@ -41,68 +41,46 @@ jobs:
       - name: Install dependencies
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: |
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
           python -m pip install --upgrade pip
-          pip install -r requirements.txt --target=".python_packages/lib/site-packages"
-          popd
-      
-      
-      - name: 'Run Azure Functions Action'
-        uses: Azure/functions-action@v1
-        id: fa
+          pip install --target="./.python_packages/lib/site-packages" -r requirements.txt
+
+      # Optional: Add step to run tests here
+      - run: ls -a
+
+      - name: Zip artifact for deployment
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: zip release.zip ./* -r
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
         with:
-          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-          package: "src/python_function/${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}"
-          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
-          scm-do-build-during-deployment: true
-          enable-oryx-build: true
+          name: python-app
+          path: |
+            src/python_function/release.zip
 
-  #     # Optional: Add step to run tests here
-  #     - run: ls -a
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
 
-  #     - name: Zip artifact for deployment
-  #       working-directory: ${{ env.WORKING_DIRECTORY }}
-  #       run: zip release.zip ./* -r
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: python-app
 
-  #     - name: Upload artifact for deployment job
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: python-app
-  #         path: |
-  #           src/python_function/release.zip
+      - name: Azure CLI login
+        uses: azure/login@v1
+        with:
+          azcliversion: 2.30.1
+          client-id: ${{env.ARM_CLIENT_ID}}
+          tenant-id: ${{env.ARM_TENANT_ID}}
+          subscription-id: ${{env.ARM_SUBSCRIPTION_ID}}
 
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   needs: build
-
-  #   steps:
-  #     - name: Download artifact from build job
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: python-app
-      
-  #     - run: ls
-
-  #     - name: Unzip artifact for deployment
-  #       run: unzip release.zip     
-        
-  #     - run: |
-  #         cd release
-  #         ls -a
-
-  #     - name: Azure CLI login
-  #       uses: azure/login@v1
-  #       with:
-  #         azcliversion: 2.30.1
-  #         client-id: ${{env.ARM_CLIENT_ID}}
-  #         tenant-id: ${{env.ARM_TENANT_ID}}
-  #         subscription-id: ${{env.ARM_SUBSCRIPTION_ID}}
-
-  #     - name: 'Deploy to Azure Functions'
-  #       run: |
-  #         az functionapp deployment source config-zip \
-  #           --resource-group ${{env.RESOURCE_GROUP_NAME}} \
-  #           --name ${{env.FUNCITONAPP_NAME}} \
-  #           --src "release.zip" \
-  #           --build-remote true
+      - name: 'Deploy to Azure Functions'
+        run: |
+          az functionapp deployment source config-zip \
+            --resource-group ${{env.RESOURCE_GROUP_NAME}} \
+            --name ${{env.FUNCITONAPP_NAME}} \
+            --src "./release.zip" \
+            --build-remote true
       
