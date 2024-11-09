@@ -83,13 +83,10 @@ resource "azurerm_function_app" "fa" {
   version                    = "~4"
 
   app_settings = {
-    FUNCTIONS_WORKER_RUNTIME              = "python"
-    APPINSIGHTS_INSTRUMENTATIONKEY        = azurerm_application_insights.app-insights.instrumentation_key
-    WEBSITE_RUN_FROM_PACKAGE              = "1"
-    APPLICATIONINSIGHTS_CONNECTION_STRING = azurerm_application_insights.app-insights.connection_string
-    AzureWebJobsFeatureFlags              = "EnableWorkerIndexing"
-    AzureWebJobsStorage                   = azurerm_storage_account.sa.primary_connection_string
-    CONNECTION_STRING                     = azurerm_storage_account.sa.primary_connection_string
+    FUNCTIONS_WORKER_RUNTIME       = "python"
+    APPINSIGHTS_INSTRUMENTATIONKEY = azurerm_application_insights.app-insights.instrumentation_key
+    WEBSITE_RUN_FROM_PACKAGE       = "1"
+    CONNECTION_STRING              = azurerm_storage_account.sa.primary_connection_string
   }
 
   site_config {
