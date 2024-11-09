@@ -82,5 +82,4 @@ jobs:
             --resource-group ${{env.RESOURCE_GROUP_NAME}} \
             --name ${{env.FUNCITONAPP_NAME}} \
             --src "./release.zip" \
-            --build-remote true
       
