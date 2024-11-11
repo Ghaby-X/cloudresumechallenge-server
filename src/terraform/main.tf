@@ -117,6 +117,7 @@ resource "azurerm_linux_function_app" "fa" {
 
   app_settings = {
     SCM_DO_BUILD_DURING_DEPLOYMENT           = true
+    FUNCTIONS_WORKER_RUNTIME                 = "python"
     CONNECTION_STRING                        = azurerm_storage_account.sa.primary_connection_string
     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING = azurerm_storage_account.sa.primary_connection_string
     WEBSITE_CONTENTSHARE                     = "f${var.project_name}"
