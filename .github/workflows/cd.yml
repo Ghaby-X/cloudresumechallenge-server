@@ -7,7 +7,7 @@ on:
             - 'src/terraform/**'
             - '.github/workflow/**'
     workflow_dispatch:
-        
+
 permissions:
     contents: 'read'
     id-token: 'write'
@@ -101,4 +101,4 @@ jobs:
                 az functionapp deployment source config-zip \
                   --resource-group ${{env.RESOURCE_GROUP_NAME}} \
                   --name ${{env.FUNCITONAPP_NAME}} \
-                  --src "./release.zip" --build-remote true
+                  --src "./release.zip"

@@ -71,37 +71,66 @@ resource "azurerm_service_plan" "asp" {
 }
 
 
-resource "azurerm_function_app" "fa" {
+# resource "azurerm_function_app" "fa" {
+#   name                = "fa-${var.project_name}"
+#   location            = var.resource_group_location
+#   resource_group_name = azurerm_resource_group.rg.name
+
+#   app_service_plan_id        = azurerm_service_plan.asp.id
+#   storage_account_name       = azurerm_storage_account.sa.name
+#   storage_account_access_key = azurerm_storage_account.sa.primary_access_key
+#   os_type                    = "linux"
+#   version                    = "~4"
+
+#   app_settings = {
+#     FUNCTIONS_WORKER_RUNTIME                 = "python"
+#     APPINSIGHTS_INSTRUMENTATIONKEY           = azurerm_application_insights.app-insights.instrumentation_key
+#     APPLICATION_INSIGHTS_CONNECTION_STRING   = azurerm_application_insights.app-insights.connection_string
+#     WEBSITE_RUN_FROM_PACKAGE                 = "1"
+#     CONNECTION_STRING                        = azurerm_storage_account.sa.primary_connection_string
+#     SCM_DO_BUILD_DURING_DEPLOYMENT           = true
+#     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING = azurerm_storage_account.sa.primary_connection_string
+#     WEBSITE_CONTENTSHARE                     = "f${var.project_name}"
+
+#   }
+
+#   site_config {
+#     linux_fx_version = "python|3.9" # remember to update this to 3.11
+
+#     cors {
+#       allowed_origins     = ["https://portal.azure.com", trimsuffix(azurerm_storage_account.sa.primary_web_endpoint, "/")]
+#       support_credentials = true
+#     }
+
+#   }
+# }
+
+
+resource "azurerm_linux_function_app" "fa" {
   name                = "fa-${var.project_name}"
   location            = var.resource_group_location
   resource_group_name = azurerm_resource_group.rg.name
 
-  app_service_plan_id        = azurerm_service_plan.asp.id
+  service_plan_id            = azurerm_service_plan.asp.id
   storage_account_name       = azurerm_storage_account.sa.name
   storage_account_access_key = azurerm_storage_account.sa.primary_access_key
-  os_type                    = "linux"
-  version                    = "~4"
 
   app_settings = {
-    FUNCTIONS_WORKER_RUNTIME                 = "python"
-    APPINSIGHTS_INSTRUMENTATIONKEY           = azurerm_application_insights.app-insights.instrumentation_key
-    APPLICATION_INSIGHTS_CONNECTION_STRING   = azurerm_application_insights.app-insights.connection_string
-    WEBSITE_RUN_FROM_PACKAGE                 = "1"
-    CONNECTION_STRING                        = azurerm_storage_account.sa.primary_connection_string
-    SCM_DO_BUILD_DURING_DEPLOYMENT           = true
-    WEBSITE_CONTENTAZUREFILECONNECTIONSTRING = azurerm_storage_account.sa.primary_connection_string
-    WEBSITE_CONTENTSHARE                     = "f${var.project_name}"
-
+    SCM_DO_BUILD_DURING_DEPLOYMENT = true
+    CONNECTION_STRING              = azurerm_storage_account.sa.primary_connection_string
   }
 
   site_config {
-    linux_fx_version = "python|3.9" # remember to update this to 3.11
+    application_insights_connection_string = azurerm_application_insights.app-insights.connection_string
+    application_insights_key               = azurerm_application_insights.app-insights.instrumentation_key
+    application_stack {
+      python_version = "3.9"
+    }
 
     cors {
       allowed_origins     = ["https://portal.azure.com", trimsuffix(azurerm_storage_account.sa.primary_web_endpoint, "/")]
       support_credentials = true
     }
-
   }
 }
 
@@ -111,5 +140,5 @@ output "primary_web_endpoint" {
 }
 
 output "function_url" {
-  value = "https://${azurerm_function_app.fa.default_hostname}.azurewebsites.net/api"
+  value = "https://${azurerm_linux_function_app.fa.name}.azurewebsites.net/api"
 }
