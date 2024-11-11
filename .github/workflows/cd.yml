@@ -7,6 +7,11 @@ on:
             - 'src/terraform/**'
             - '.github/workflow/**'
     workflow_dispatch:
+        
+permissions:
+    contents: 'read'
+    id-token: 'write'
+
 
 env:
     TERRAFORM_WORKING_DIRECTORY: 'src/terraform'

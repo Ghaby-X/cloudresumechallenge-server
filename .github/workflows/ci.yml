@@ -12,19 +12,10 @@ on:
       - 'src/python_function/**'
   workflow_dispatch:
 
-permissions:
-    contents: 'read'
-    id-token: 'write'
-
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: . 
   PYTHON_VERSION: '3.9' 
   WORKING_DIRECTORY: 'src/python_function'
-  ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-  ARM_TENANT_ID: ${{ secrets.TENANT_ID}}
-  ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID}}
-  RESOURCE_GROUP_NAME: rg-resumecloudchallenge-dev
-  FUNCITONAPP_NAME: fa-resumecloudchallenge
 
 jobs:
   build:
