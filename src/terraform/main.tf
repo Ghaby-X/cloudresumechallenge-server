@@ -83,11 +83,15 @@ resource "azurerm_function_app" "fa" {
   version                    = "~4"
 
   app_settings = {
-    FUNCTIONS_WORKER_RUNTIME               = "python"
-    APPINSIGHTS_INSTRUMENTATIONKEY         = azurerm_application_insights.app-insights.instrumentation_key
-    APPLICATION_INSIGHTS_CONNECTION_STRING = azurerm_application_insights.app-insights.connection_string
-    WEBSITE_RUN_FROM_PACKAGE               = "1"
-    CONNECTION_STRING                      = azurerm_storage_account.sa.primary_connection_string
+    FUNCTIONS_WORKER_RUNTIME                 = "python"
+    APPINSIGHTS_INSTRUMENTATIONKEY           = azurerm_application_insights.app-insights.instrumentation_key
+    APPLICATION_INSIGHTS_CONNECTION_STRING   = azurerm_application_insights.app-insights.connection_string
+    WEBSITE_RUN_FROM_PACKAGE                 = "1"
+    CONNECTION_STRING                        = azurerm_storage_account.sa.primary_connection_string
+    SCM_DO_BUILD_DURING_DEPLOYMENT           = true
+    WEBSITE_CONTENTAZUREFILECONNECTIONSTRING = azurerm_storage_account.sa.primary_connection_string
+    WEBSITE_CONTENTSHARE                     = "f${var.project_name}"
+
   }
 
   site_config {
