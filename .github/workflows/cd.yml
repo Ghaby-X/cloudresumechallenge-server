@@ -1,4 +1,4 @@
-name: Build and deploy function to azure
+name: continuous deployment
 on:
     push:
         branches:
