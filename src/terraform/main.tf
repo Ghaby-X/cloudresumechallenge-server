@@ -116,7 +116,6 @@ resource "azurerm_linux_function_app" "fa" {
   storage_account_access_key = azurerm_storage_account.sa.primary_access_key
 
   app_settings = {
-    FUNCTIONS_WORKER_RUNTIME                 = "python"
     CONNECTION_STRING                        = azurerm_storage_account.sa.primary_connection_string
     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING = azurerm_storage_account.sa.primary_connection_string
     WEBSITE_CONTENTSHARE                     = "f${var.project_name}"
