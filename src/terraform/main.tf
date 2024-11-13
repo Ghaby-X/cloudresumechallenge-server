@@ -120,13 +120,12 @@ resource "azurerm_linux_function_app" "fa" {
     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING = azurerm_storage_account.sa.primary_connection_string
     WEBSITE_CONTENTSHARE                     = "f${var.project_name}"
     FUNCTIONS_WORKER_RUNTIME                 = "python"
+    "PYTHON_VERSION"                         = "3.9"
   }
 
   site_config {
     application_insights_connection_string = azurerm_application_insights.app-insights.connection_string
     application_insights_key               = azurerm_application_insights.app-insights.instrumentation_key
-    linux_fx_version                       = "python|3.9"
-
     cors {
       allowed_origins     = ["https://portal.azure.com", trimsuffix(azurerm_storage_account.sa.primary_web_endpoint, "/")]
       support_credentials = true
