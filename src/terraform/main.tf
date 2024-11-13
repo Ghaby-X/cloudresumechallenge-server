@@ -119,6 +119,7 @@ resource "azurerm_linux_function_app" "fa" {
     CONNECTION_STRING                        = azurerm_storage_account.sa.primary_connection_string
     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING = azurerm_storage_account.sa.primary_connection_string
     WEBSITE_CONTENTSHARE                     = "f${var.project_name}"
+    FUNCTIONS_WORKER_RUNTIME                 = "python"
   }
 
   site_config {
