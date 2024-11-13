@@ -125,9 +125,7 @@ resource "azurerm_linux_function_app" "fa" {
   site_config {
     application_insights_connection_string = azurerm_application_insights.app-insights.connection_string
     application_insights_key               = azurerm_application_insights.app-insights.instrumentation_key
-    application_stack {
-      python_version = "3.9"
-    }
+    linux_fx_version                       = "python|3.9"
 
     cors {
       allowed_origins     = ["https://portal.azure.com", trimsuffix(azurerm_storage_account.sa.primary_web_endpoint, "/")]
