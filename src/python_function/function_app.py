@@ -26,7 +26,13 @@ def visitor_trigger(req: func.HttpRequest) -> func.HttpResponse:
         # query entity from table
         entity = table_client.get_entity(partition_key=PARTITION_KEY, row_key=ROW_KEY, select=SELECT)
     except:
-        return func.HttpResponse(f"error creating table and/or retrieving entity")
+        create_entity = {
+            'PartitionKey':PARTITION_KEY,
+            'RowKey': ROW_KEY,
+            'count': 1
+        }
+        table_client.create_entity(entity=create_entity)
+        return func.HttpResponse(json.dump({ "count": 1}), mimetype="application/json", charset='utf-8')
     
 
     # create new entity and update with existing

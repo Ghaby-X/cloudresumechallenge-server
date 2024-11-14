@@ -3,9 +3,6 @@ on:
     push:
         branches:
             - main
-        paths:
-            - 'src/terraform/**'
-            - '.github/workflow/**'
     workflow_dispatch:
 
 permissions:
