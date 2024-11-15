@@ -1,116 +1,163 @@
-# Server-Side implementation for Resume Cloud Challenge
+# Resume Cloud Challenge - Server Implementation
 
-This repository contains the server-side code and infrastructure for the Resume Cloud Challenge. The server-side is responsible for handling API requests to update and retrieve the visitor count, as well as managing cloud resources such as Azure Function Apps and Storage Accounts.
+[![Azure](https://img.shields.io/badge/azure-%230072C6.svg?style=for-the-badge&logo=microsoftazure&logoColor=white)](https://azure.microsoft.com)
+[![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://python.org)
+[![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)](https://terraform.io)
+[![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/features/actions)
 
-## Table of Contents
+A cloud-native serverless implementation for tracking and managing visitor counts using Azure Functions and Storage services. This server-side solution provides scalable API endpoints for updating and retrieving visitor statistics.
 
-    Overview
-    Server Architecture
-    Provisioning Cloud Resources with Terraform
-    Python Function to Update Visitor Count
-    CI/CD Pipeline for Server
-    Deployment Instructions
-    Technologies Used
+## Features
 
-## Overview
+- **Serverless Architecture**: Built on Azure Functions for automatic scaling and cost optimization
+- **Persistent Storage**: Utilizes Azure Storage Tables for reliable data persistence
+- **Infrastructure as Code**: Complete Terraform configuration for Azure resource provisioning
+- **Automated Deployment**: Integrated CI/CD pipeline using GitHub Actions
+- **RESTful API**: HTTP endpoints for visitor count management
 
-The server-side implementation is built using Azure Functions and Azure Storage services. The main functionality includes:
+## Architecture
 
-    Azure Function to handle HTTP requests that update the visitor count in the Azure Storage Table.
-    Azure Storage Account to store the visitor count data.
-    Terraform to provision Azure resources like the Function App and Storage Account.
-    CI/CD Pipeline (GitHub Actions) to automate deployment to Azure whenever there are code changes.
+The solution consists of the following components:
 
-This project demonstrates a cloud-native architecture that is scalable, serverless, and easy to deploy.
-Server Architecture
+- **Azure Function App**: Serverless HTTP-triggered functions for visitor count operations
+- **Azure Storage Account**: Persistent storage for visitor statistics
+- **Terraform Configuration**: IaC for Azure resource management
+- **GitHub Actions Pipeline**: Automated deployment workflow
 
-The architecture is composed of the following components:
+## Prerequisites
 
-Azure Function App: A serverless function that triggers on HTTP requests. The function increments the visitor count stored in the Azure Storage Table.
+- Azure CLI installed and configured
+- Terraform >=1.0.0
+- Python >=3.8
+- Azure Subscription
+- GitHub Account (for CI/CD)
 
-Azure Storage Account: A storage service used to hold data. This includes a table that tracks the visitor count.
+## Installation
 
-Terraform: Used for provisioning and managing Azure resources such as the Function App and Storage Account.
+1. Clone the Repository
+```bash
+git clone https://github.com/yourusername/resume-cloud-challenge
+cd resume-cloud-challenge
+```
 
-CI/CD Pipeline: Automated deployment pipeline via GitHub Actions for continuous deployment of the server-side code.
-
-## Provisioning Cloud Resources with Terraform
-
-This project uses Terraform to provision the following Azure resources:
-
-    Function App: Runs the Python function to update the visitor count.
-    Storage Account: Stores the visitor count in a table.
-    Storage Container: Used for other potential static resources.
-
-Steps to Provision Resources
-
-    Install Terraform if you don't have it installed:
-
-Set up your Azure credentials (make sure you have Azure CLI configured):
-
+2. Configure Azure Credentials
+```bash
 az login
+az account set --subscription "<your-subscription-id>"
+```
 
-Initialize Terraform to install required providers:
-
+3. Initialize Terraform
+```bash
+cd terraform
 terraform init
+```
 
-Apply Terraform configuration to provision the resources:
+4. Deploy Infrastructure
+```bash
+terraform apply
+```
 
-    terraform apply
+## Configuration
 
-    Terraform will prompt for confirmation to create the resources. Type yes to proceed.
+### Environment Variables
 
-    After successful provisioning, Terraform will output the URLs and keys for the Function App and Storage Account.
+Create a `local.settings.json` file in the function app directory:
 
-Python Function to Update Visitor Count
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "AzureWebJobsStorage": "<storage-connection-string>",
+    "STORAGE_CONNECTION_STRING": "<storage-connection-string>"
+  }
+}
+```
 
-The core functionality of the server-side is handled by an Azure Function written in Python. This function is responsible for:
+### GitHub Actions Secrets
 
-    Accepting HTTP requests that trigger the update of the visitor count.
-    Connecting to Azure Storage to retrieve and update the visitor count in the Storage Table.
+Configure the following secrets in your GitHub repository:
 
-Python Function Code
+- `AZURE_CLIENT_ID`
+- `AZURE_CLIENT_SECRET`
+- `AZURE_TENANT_ID`
 
-The Python function is located in the function folder. Here is a simplified version of the core code:
+## Deployment
 
-import azure.functions as func
-from azure.storage.table import TableServiceClient
+### Manual Deployment
 
+1. Build the Function App:
+```bash
+cd function_app
+func azure functionapp publish <your-function-app-name>
+```
 
-This function:
+### Automated Deployment
 
-    Connects to the Azure Storage Table to retrieve the current visitor count.
-    Increments the count by one each time the function is triggered.
-    Returns the updated count in the HTTP response.
+The repository includes a GitHub Actions workflow that automatically deploys changes when pushed to the main branch. The workflow:
 
-Function App Configuration
+1. Validates Terraform configurations
+2. Runs Python tests
+3. Deploys infrastructure changes
+4. Updates the Function App
 
-You can configure the function app in the Azure portal or using terraform. The function is triggered by an HTTP request, which makes it suitable for a RESTful API.
-CI/CD Pipeline for Server
+## API Documentation
 
-The server-side code is automatically deployed to Azure via a CI/CD pipeline set up with GitHub Actions.
-GitHub Actions Workflow
+### Update Visitor Count
+```http
+POST /api/visitors
+```
 
-The .github/workflows/azure-functions.yml file automates the deployment process whenever there is a change pushed to the repository.
+**Response**
+```json
+{
+  "count": 42,
+  "timestamp": "2024-01-01T12:00:00Z"
+}
+```
 
+### Get Visitor Count
+```http
+GET /api/visitors
+```
 
-Secrets Required:
+**Response**
+```json
+{
+  "count": 42
+}
+```
 
-    AZURE_CLIENT_ID: Azure Service Principal ID
-    AZURE_CLIENT_SECRET: Azure Service Principal Secret
-    AZURE_TENANT_ID: Azure Tenant ID
+## Local Development
 
-This setup ensures that whenever changes are pushed to the main branch, the function app will automatically update in Azure.
-Deployment Instructions
+1. Install dependencies:
+```bash
+python -m venv venv
+source venv/bin/activate  # or `venv\Scripts\activate` on Windows
+pip install -r requirements.txt
+```
 
+2. Run locally:
+```bash
+func start
+```
 
-Technologies Used
+## Testing
 
-    Azure Functions (Python)
-    Azure Storage Account (for storing visitor count)
-    Terraform (for infrastructure as code)
-    GitHub Actions (for CI/CD)
+```bash
+python -m pytest tests/
+```
 
-If you have any questions or need further assistance, feel free to open an issue or contribute to the repository. Happy coding!
+## Contributing
 
-This README is specifically for the server-side implementation, covering the Azure Functions, Terraform setup, and CI/CD pipelines used to deploy the backend components.
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
