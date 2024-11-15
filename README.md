@@ -26,12 +26,15 @@ Server Architecture
 
 The architecture is composed of the following components:
 
-    Azure Function App: A serverless function that triggers on HTTP requests. The function increments the visitor count stored in the Azure Storage Table.
-    Azure Storage Account: A storage service used to hold data. This includes a table that tracks the visitor count.
-    Terraform: Used for provisioning and managing Azure resources such as the Function App and Storage Account.
-    CI/CD Pipeline: Automated deployment pipeline via GitHub Actions for continuous deployment of the server-side code.
+Azure Function App: A serverless function that triggers on HTTP requests. The function increments the visitor count stored in the Azure Storage Table.
 
-Provisioning Cloud Resources with Terraform
+Azure Storage Account: A storage service used to hold data. This includes a table that tracks the visitor count.
+
+Terraform: Used for provisioning and managing Azure resources such as the Function App and Storage Account.
+
+CI/CD Pipeline: Automated deployment pipeline via GitHub Actions for continuous deployment of the server-side code.
+
+## Provisioning Cloud Resources with Terraform
 
 This project uses Terraform to provision the following Azure resources:
 
