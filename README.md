@@ -76,7 +76,7 @@ Create a `local.settings.json` file in the function app directory:
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "python",
     "AzureWebJobsStorage": "<storage-connection-string>",
-    "STORAGE_CONNECTION_STRING": "<storage-connection-string>"
+    "CONNECTION_STRING": "<storage-connection-string>"
   }
 }
 ```
@@ -88,6 +88,7 @@ Configure the following secrets in your GitHub repository:
 - `AZURE_CLIENT_ID`
 - `AZURE_CLIENT_SECRET`
 - `AZURE_TENANT_ID`
+- `AZURE_SUBSSCRIPTION_ID`
 
 ## Deployment
 
@@ -110,22 +111,9 @@ The repository includes a GitHub Actions workflow that automatically deploys cha
 
 ## API Documentation
 
-### Update Visitor Count
+### Get / Update Visitor Count
 ```http
-POST /api/visitors
-```
-
-**Response**
-```json
-{
-  "count": 42,
-  "timestamp": "2024-01-01T12:00:00Z"
-}
-```
-
-### Get Visitor Count
-```http
-GET /api/visitors
+GET /api/visitor_trigger
 ```
 
 **Response**
@@ -140,13 +128,13 @@ GET /api/visitors
 1. Install dependencies:
 ```bash
 python -m venv venv
-source venv/bin/activate  # or `venv\Scripts\activate` on Windows
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
 2. Run locally:
 ```bash
-func start
+func host start
 ```
 
 ## Testing
