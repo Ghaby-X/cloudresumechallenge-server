@@ -20,6 +20,10 @@ A cloud-native solution for deploying static websites with real-time visitor tra
 
 ## Architecture
 
+
+![image](https://github.com/user-attachments/assets/6c0e1462-78df-4965-bb2b-e7acfdf2c76a)
+
+
 The solution consists of the following components:
 
 - **Azure Function App**: Serverless HTTP-triggered functions for visitor count operations
