@@ -5,7 +5,10 @@
 [![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)](https://terraform.io)
 [![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/features/actions)
 
-A cloud-native serverless implementation for tracking and managing visitor counts using Azure Functions and Storage services. This server-side solution provides scalable API endpoints for updating and retrieving visitor statistics.
+A cloud-native solution for deploying static websites with real-time visitor tracking. Built on Azure's serverless architecture, this project automates infrastructure provisioning and provides scalable API endpoints to track visitor statistics. The implementation uses Azure Functions for backend operations and Azure Storage for data persistence, following Infrastructure as Code (IaC) principles with Terraform.
+
+## Related Projects
+- [Resume Cloud Challenge - Client](https://github.com/Ghaby-X/cloudresumechallenge-client) - Frontend implementation using html, css, js and storage static website
 
 ## Features
 
